@@ -56,5 +56,34 @@ class MoviesController < ApplicationController
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
   end
+  
+  def search_tmdb
+# @str = Movie.find_in_tmdb(params[:search_terms][:title])
+    str = params[:search_terms][:title]   
+    
+      if str.blank?
+      flash[:notice] = "Invalid search term #{@str}"
+      redirect_to movies_path
+      else
+      @movies=Movie.find_in_tmdb(str)
+      #@movie=Movie.find_in_tmdb(@str)
+      #redirect_to movies_search_tmdb_path , :method => :post
+	#redirect_to movies_path
+      end
+    end
+  def add_tmdb
+ var=params[:tmdb_movies]
+ 
+ if var==[] or var==nil
+   flash[:notice] = "Please select the movie as no movie is selected"
+  
+ else
+   arr=var.keys
+   Movie::create_from_tmdb arr
+   flash[:notice] = "Movies inserted in database"
+  
+ end
+ redirect_to movies_path
+ end
 
 end
